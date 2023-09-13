@@ -1,5 +1,6 @@
 package com.dokiwei.basemvvm.ui.home.paging
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -21,16 +22,17 @@ class HomePagingSource(private val flag: Constants.HomeApiMethod) : PagingSource
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ArticleDatas> {
         return try{
+            val currentPage = params.key ?: 0
             val data = when(flag){
                 Constants.HomeApiMethod.Home ->
-                    RetrofitClient.homeApi.homeArticle(params.key ?: 0)
+                    RetrofitClient.homeApi.homeArticle(currentPage)
                 Constants.HomeApiMethod.Square ->
-                    RetrofitClient.homeApi.squareArticle(params.key ?: 0)
+                    RetrofitClient.homeApi.squareArticle(currentPage)
                 Constants.HomeApiMethod.Qa ->
-                    RetrofitClient.homeApi.qaArticle(params.key ?: 0)
+                    RetrofitClient.homeApi.qaArticle(currentPage)
             }
-            val prevKey = if (params is LoadParams.Prepend) data.data.curPage - 1 else null
-            val nextKey = if (params is LoadParams.Append) data.data.curPage + 1 else null
+            val prevKey = if (currentPage != 0) data.data.curPage - 1 else null
+            val nextKey = data.data.curPage + 1
             LoadResult.Page(data = data.data.datas, prevKey = prevKey, nextKey = nextKey)
         }catch (e: IOException) {
             LoadResult.Error(e)

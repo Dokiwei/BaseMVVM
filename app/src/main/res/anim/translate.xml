@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fromXDelta="100%"
+    android:fromYDelta="0%"
+    android:interpolator="@android:anim/decelerate_interpolator"
+    android:toXDelta="0%"
+    android:toYDelta="0%">
+    <!--
+    translate 平移动画
+    fromXDelta  +来自屏幕右侧  -来自屏幕左侧
+    fromYDelta  +来自屏幕上面  -来自屏幕下面
+    toXDelta toYDelta 在何处停止  一般0%
+    duration 动画时长
+    -->
+</translate>

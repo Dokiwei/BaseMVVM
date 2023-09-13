@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scale xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fromXScale="0"
+    android:fromYScale="0"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:toXScale="1"
+    android:toYScale="1">
+    <!--
+    Scale 尺寸缩放动画
+    fromScale 初始大小
+    toScale 目标大小
+    pivot 缩放中心轴
+    -->
+</scale>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fromDegrees="-270"
+    android:pivotX="100%"
+    android:pivotY="100%"
+    android:toDegrees="0">
+
+    <!--
+    rotate 旋转动画
+    fromDegrees 开始角度
+    toDegrees 结束角度
+    pivotX pivotY 中心旋转轴
+    -->
+</rotate>

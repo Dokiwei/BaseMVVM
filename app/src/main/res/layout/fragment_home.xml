@@ -9,20 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/topTab"
+        <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:contentDescription="首页Tab"
-            app:tabMode="fixed"
-            app:tabIndicatorFullWidth="false"/>
+            app:menu="@menu/search">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/topTab"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:contentDescription="首页Tab"
+                app:tabIndicatorFullWidth="false"
+                app:tabMode="fixed" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </androidx.viewpager2.widget.ViewPager2>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
