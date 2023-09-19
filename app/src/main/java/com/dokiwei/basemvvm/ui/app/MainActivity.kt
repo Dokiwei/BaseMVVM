@@ -1,9 +1,9 @@
 package com.dokiwei.basemvvm.ui.app
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.dokiwei.basemvvm.R
+import androidx.appcompat.app.AppCompatActivity
 import com.dokiwei.basemvvm.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,5 +11,6 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(this.root)
         }
+
     }
 }

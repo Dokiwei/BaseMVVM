@@ -7,7 +7,7 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/homeItem"
+        android:id="@+id/item_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -23,7 +23,6 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="@style/CircleStyle" />
@@ -32,16 +31,16 @@
                 android:id="@+id/shareUser"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="用户名"
                 android:textAlignment="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/avatar" />
 
             <TextView
                 android:id="@+id/tag"
-                android:layout_width="200dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="标签"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/title"
                 app:layout_constraintEnd_toStartOf="@+id/like"
@@ -49,12 +48,13 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="200dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="标题"
                 android:textSize="18sp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/like"
                 app:layout_constraintStart_toEndOf="@+id/avatar"
@@ -62,14 +62,15 @@
 
             <TextView
                 android:id="@+id/type"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:alpha="0.6"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="分类"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/date"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@id/title" />
 
@@ -90,7 +91,6 @@
                 android:layout_height="wrap_content"
                 android:alpha="0.6"
                 android:maxLines="1"
-                android:text="日期"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

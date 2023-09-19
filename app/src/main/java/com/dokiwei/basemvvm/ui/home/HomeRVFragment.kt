@@ -7,6 +7,7 @@ import androidx.paging.LoadState
 import com.dokiwei.basemvvm.base.BaseFragment
 import com.dokiwei.basemvvm.databinding.FragmentHomeRvBinding
 import com.dokiwei.basemvvm.ui.home.adapter.HomeAdapter
+import com.dokiwei.basemvvm.ui.home.viewmodel.HomeRVViewModel
 import com.dokiwei.basemvvm.util.Constants
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/mainNavFragment"
         android:name="com.dokiwei.basemvvm.ui.app.MainNavFragment"
-        android:label="MainNavFragment" />
+        android:label="MainNavFragment" >
+        <action
+            android:id="@+id/action_mainNavFragment_to_customViewFragment"
+            app:destination="@id/customViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customViewFragment"
+        android:name="com.dokiwei.basemvvm.ui.customview.CustomViewFragment"
+        android:label="CustomViewFragment" >
+        <action
+            android:id="@+id/action_customViewFragment_to_mainNavFragment"
+            app:destination="@id/mainNavFragment" />
+    </fragment>
 </navigation>

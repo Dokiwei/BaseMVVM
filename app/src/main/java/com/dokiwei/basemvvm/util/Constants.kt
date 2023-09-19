@@ -43,4 +43,9 @@ object Constants {
         //缩放动画：在y轴上缩放
         data object ScaleY : AnimProperty("scaleY")
     }
+
+    sealed class LogTag(val tag:String){
+        data object Default:LogTag("默认")
+        data object Lifecycle:LogTag("Lifecycle")
+    }
 }

@@ -7,19 +7,26 @@ androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
 material = "1.9.0"
-constraintlayout = "2.1.4"
 retrofit2 = "2.9.0"
+ok-http3 = "5.0.0-alpha.11"
 cookieJar = "1.0.1"
 nav = "2.7.2"
-refresh = "1.1.0"
-paging-version = "3.2.0"
+paging-version = "3.2.1"
 room_version = "2.5.2"
 hilt = "2.48"
 ksp = "1.9.10-1.0.13"
 core = "1.12.0"
-ok-http3 = "5.0.0-alpha.11"
+constraintlayout = "2.1.4"
+refresh = "1.1.0"
+media="1.6.0"
+media3="1.1.1"
+glide = "4.16.0"
 
 [libraries]
+#glide
+glide = {group="com.github.bumptech.glide",name="glide",version.ref="glide"}
+glide-compiler = {group="com.github.bumptech.glide",name="ksp",version.ref="glide"}
+
 #hilt
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -40,24 +47,27 @@ navigation = { group = "androidx.navigation", name = "navigation-ui-ktx", versio
 #refresh
 refresh = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "refresh" }
 
-#retrofit
+#network
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
-
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "ok-http3" }
-
-
-#cookie
 persistentCookieJar = { group = "com.github.franmontiel", name = "PersistentCookieJar", version.ref = "cookieJar" }
 
+#androidx
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-media = { group = "androidx.media", name = "media", version.ref = "media" }
+androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
+androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
+androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
+
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+#test
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

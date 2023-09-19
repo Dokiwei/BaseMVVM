@@ -41,7 +41,7 @@ class HomeAdapter : PagingDataAdapter<ArticleDatas, HomeAdapter.HomeViewHolder>(
         private val shareUser: TextView = view.findViewById(R.id.shareUser)
         private val date:TextView = view.findViewById(R.id.date)
         private val likeIcon: ImageButton = view.findViewById(R.id.like)
-        private val homeItem: CardView = view.findViewById(R.id.homeItem)
+        private val homeItem: CardView = view.findViewById(R.id.item_home)
 
         private val avatar: ShapeableImageView = view.findViewById(R.id.avatar)
         fun bind(item: ArticleDatas?, context: Context) {

@@ -23,9 +23,6 @@ android {
 
     viewBinding{enable=true}
     dataBinding{enable=true}
-    kapt {
-        correctErrorTypes = true
-    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -45,37 +42,59 @@ android {
 }
 
 dependencies {
+    //glide
+    implementation(libs.glide)
+    ksp(libs.glide.compiler)
 
     //navigation
     implementation(libs.navigation.fragment)
     implementation(libs.navigation)
+
     //room
     implementation(libs.room.core)
     implementation(libs.room.paging)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+
     //paging3
     implementation(libs.paging3)
+
     //hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
-    //cookie
-//    implementation(libs.persistentCookieJar)
+
     //network
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)
+    //cookie
+    implementation(libs.persistentCookieJar)
+
+
     //refresh
     implementation(libs.refresh)
+
     //androidx
     implementation(libs.androidx.core)
-
-
+    implementation(libs.androidx.media)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media)
+    implementation(libs.androidx.media)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.appcompat)
     implementation(libs.core.ktx)
-    implementation(libs.appcompat)
+
     implementation(libs.material)
-    implementation(libs.constraintlayout)
-    testImplementation(libs.junit)
+
+    //test
+    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    testImplementation(libs.junit)
+
+
+}
+kapt {
+    correctErrorTypes = true
 }

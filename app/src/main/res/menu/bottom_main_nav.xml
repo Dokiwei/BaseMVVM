@@ -4,6 +4,9 @@
     <item android:id="@+id/homeFragment"
         android:icon="@drawable/home_icon"
         android:title="@string/home"/>
+    <item android:id="@+id/musicFragment"
+        android:icon="@drawable/music_icon"
+        android:title="@string/music"/>
     <item android:id="@+id/accountFragment"
         android:icon="@drawable/account_icon"
         android:title="@string/account"/>
