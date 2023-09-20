@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.dokiwei.basemvvm.R
@@ -20,8 +19,54 @@ import com.google.android.material.imageview.ShapeableImageView
 class MusicDataAdapter(
     private val musicDataList: List<MusicData>,
     private val fragment: Fragment
-) : RecyclerView.Adapter<MusicDataAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var onItemClickListener: OnItemClickListener
+
+    companion object {
+        private const val TYPE_EMPTY = 1
+        private const val TYPE_NORMAL = 0
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val layoutInflater=LayoutInflater.from(parent.context)
+        return when(viewType){
+            TYPE_NORMAL -> {
+                val view = layoutInflater.inflate(R.layout.item_music, parent, false)
+                ViewHolder(view)
+            }
+            else ->{
+                val view = layoutInflater.inflate(R.layout.empty_layout, parent, false)
+                EmptyViewHolder(view)
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (musicDataList.isEmpty()) TYPE_EMPTY else TYPE_NORMAL
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if(holder is  ViewHolder){
+            val data = musicDataList[position]
+            holder.bind(data, fragment)
+            holder.itemView.setAnim(fragment.requireContext(), R.anim.item_anim)
+            holder.itemView.setOnClickListener {
+                onItemClickListener.onItemClick(data, position)
+            }
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return if (musicDataList.isEmpty()) 1 else musicDataList.size
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(musicData: MusicData, position: Int)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val name: TextView = view.findViewById(R.id.name)
@@ -36,39 +81,12 @@ class MusicDataAdapter(
                     Glide.with(fragment)
                         .load(MetadataReaderUtils.getAlbumArt(fragment.requireContext(), imgId))
                         .skipMemoryCache(true)
-                        .transition(withCrossFade(DrawableCrossFadeFactory.Builder().build()) )
+                        .transition(withCrossFade(DrawableCrossFadeFactory.Builder().build()))
                         .into(avatar)
                 }
                 likeIcon.setImageResource(R.drawable.un_favorite_icon)
             }
         }
     }
-
-    interface OnItemClickListener {
-        fun onItemClick(musicData: MusicData, position: Int)
-    }
-
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.onItemClickListener = onItemClickListener
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = musicDataList[position]
-        holder.bind(data,fragment)
-        holder.itemView.setAnim(fragment.requireContext(), R.anim.item_anim)
-        holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClick(data, position)
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_music, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return musicDataList.size
-    }
-
-
+    class EmptyViewHolder(view: View):RecyclerView.ViewHolder(view)
 }

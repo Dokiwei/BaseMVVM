@@ -1,10 +1,13 @@
 package com.dokiwei.basemvvm.ui.customview
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModel
 import com.dokiwei.basemvvm.base.BaseFragment
 import com.dokiwei.basemvvm.databinding.FragmentCustomViewBinding
-import com.dokiwei.basemvvm.component.Fish
 
 /**
  * @author DokiWei
@@ -18,8 +21,11 @@ class CustomViewFragment: BaseFragment<FragmentCustomViewBinding, ViewModel>(
         viewModel: ViewModel?,
         savedInstanceState: Bundle?
     ) {
-        binding.fish.setImageDrawable(Fish())
-
+        val windowInsetsCompat = ViewCompat.getRootWindowInsets(binding.root.findViewById<FrameLayout>(android.R.id.content))
+        val statusBarsHeight =
+            windowInsetsCompat?.getInsets(WindowInsetsCompat.Type.statusBars())?.top
+        val navigationBarsHeight =
+            windowInsetsCompat?.getInsets(WindowInsetsCompat.Type.navigationBars())?.top
+        Log.e("状态栏高度","$statusBarsHeight--$navigationBarsHeight")
     }
-
 }

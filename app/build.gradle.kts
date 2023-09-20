@@ -61,7 +61,7 @@ dependencies {
 
     //hilt
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     //network
     implementation(libs.retrofit)

@@ -33,9 +33,9 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.ForkJoinPool
 
 @UnstableApi
 /**
@@ -43,7 +43,7 @@ import java.util.concurrent.ForkJoinPool
  * @date 2023/9/18 16:20
  */
 class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
-    FragmentMusicBinding::inflate, MusicViewModel::class.java
+    FragmentMusicBinding::inflate, MusicViewModel::class.java,true
 ) {
 
     private var player: Player? = null
@@ -53,6 +53,17 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
     override fun initFragment(
         binding: FragmentMusicBinding, viewModel: MusicViewModel?, savedInstanceState: Bundle?
     ) {
+        //设置appbar的paddingTop以解决状态栏下沉
+        lifecycleScope.launch(MyCoroutineExceptionHandler.handler) {
+            publicViewModel?.statusBarsHeight?.let { flow ->
+                //通过flow来监听statusBarsHeight的变化
+                //因为值在activity获取,而只有view创建成功后才会对activity进行创建,所以需要用flow来获取
+                flow.collectLatest {
+                    binding.appBarLayout.setPadding(0, it, 0, 0)
+                }
+            }
+        }
+
         val albumAnim =
             ObjectAnimator.ofFloat(binding.album, Constants.AnimProperty.Rotation.name, 0f, 360f)
                 .apply {
@@ -72,7 +83,7 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
             MediaController.Builder(requireContext(), sessionToken).buildAsync()
 
         //监听事件初始化
-        initListener(mediaControllerFuture, musicDataList, binding, albumAnim, viewModel)
+        initListener(mediaControllerFuture, musicDataList, binding, albumAnim, viewModel,musicDataList.isNotEmpty())
     }
 
 
@@ -82,12 +93,13 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
         musicDataList: List<MusicData>,
         binding: FragmentMusicBinding,
         albumAnim: ObjectAnimator,
-        viewModel: MusicViewModel?
+        viewModel: MusicViewModel?,
+        dataIsNotEmpty: Boolean
     ) {
         mediaControllerFuture.addListener(
             {
                 //获取player 会导致卡顿,但是为了与后台播放service进行联动必须这样获取 google推荐方式
-                player = mediaControllerFuture.get()
+                if (dataIsNotEmpty) player = mediaControllerFuture.get()
                 //初始化获取player的媒体列表
                 player?.setMediaItems(musicDataList.map {
                     MediaItem.Builder().setMediaId("${it.uri}").build()
