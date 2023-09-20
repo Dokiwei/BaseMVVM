@@ -43,7 +43,7 @@ Account界面按钮包括几个小功能:测试通知,协程作用域异常捕�
 
 使用 `Glide` 的 `load()` 方法传入 'Activity' 或是 `Fragment` ,当这些页面载体销毁时, `Glide` 会自动的跟着他们的生命周期进行销毁,以此来让 `Bitmap` 得到释放
 
-最终应用在 GC 后能顺利的保持在 300多MB 的内存,在 GC 后还有未释放的 `Bitmap` ,可能是内存中的一些缓存,目前还未找出引用源
+最终应用在 GC 后能顺利的保持在 200多MB 的内存,在 GC 后还有未释放的 `Bitmap` ,可能是内存中的一些缓存,目前还未找出引用源
 
 ## 鸣谢
 [Setruth-BiliBili](https://space.bilibili.com/367514778/?spm_id_from=333.999.0.0)  [Setruth-Github](https://github.com/setruth)
