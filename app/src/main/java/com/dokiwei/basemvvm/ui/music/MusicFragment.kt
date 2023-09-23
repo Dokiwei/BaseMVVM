@@ -187,7 +187,7 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
             viewModel?.let {
                 val ct = it.currentTime.value
                 val et = it.endTime.value
-                if (ct!=null&&et!=null){
+                if (ct != null && et != null) {
                     val s = "${Conversion.longConversionToTimeString(ct)}/${
                         Conversion.longConversionToTimeString(et)
                     }"
@@ -203,7 +203,7 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
             mediaMetadata.artworkData?.let {
                 viewModel?.setArtworkData(
                     Conversion.bitmapToByteArray(
-                        Conversion.byteArrayToBitMap(
+                        Conversion.byteArrayToBitmap(
                             it, binding.musicControllerAlbumFragmentMusic.width
                         )
                     )
@@ -316,7 +316,7 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
         }
 
         viewModel?.apply {
-            val lastAlbum = Conversion.byteArrayToBitMap(
+            val lastAlbum = Conversion.byteArrayToBitmap(
                 artworkData, binding.musicControllerAlbumFragmentMusic.width
             ).run {
                 Conversion.bitmapToByteArray(
@@ -328,7 +328,7 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
         val reqWidth = binding.musicControllerAlbumFragmentMusic.width
         val reqHeight = binding.musicControllerAlbumFragmentMusic.height
         Glide.with(this@MusicFragment)
-            .load(Conversion.byteArrayToBitMap(artworkData, reqWidth, reqHeight))
+            .load(Conversion.byteArrayToBitmap(artworkData, reqWidth, reqHeight))
             .override(reqWidth, reqHeight).into(binding.musicControllerAlbumFragmentMusic)
     }
 

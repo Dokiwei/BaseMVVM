@@ -2,7 +2,6 @@ package com.dokiwei.basemvvm.util
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.io.FileDescriptor
 
@@ -31,10 +30,10 @@ object Conversion {
             BitmapFactory.decodeFileDescriptor(fd, null, this)
         }
 
-    fun byteArrayToBitMap(byteArray: ByteArray, size: Int) =
-        byteArrayToBitMap(byteArray, size, size)
+    fun byteArrayToBitmap(byteArray: ByteArray, size: Int) =
+        byteArrayToBitmap(byteArray, size, size)
 
-    fun byteArrayToBitMap(byteArray: ByteArray, reqWidth: Int, reqHeight: Int): Bitmap =
+    fun byteArrayToBitmap(byteArray: ByteArray, reqWidth: Int, reqHeight: Int): Bitmap =
         BitmapFactory.Options().run {
             inJustDecodeBounds = true
             BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, this)

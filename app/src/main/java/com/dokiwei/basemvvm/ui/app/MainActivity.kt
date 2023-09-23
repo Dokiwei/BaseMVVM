@@ -23,12 +23,30 @@ class MainActivity : AppCompatActivity() {
     private val publicViewModel by lazy { ViewModelProvider(this)[PublicViewModel::class.java] }
 
     companion object {
-        private val PERMISSIONS_STORAGE = arrayOf(
+        private val PERMISSIONS = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
+
+        @RequiresApi(Build.VERSION_CODES.P)
+        private val PERMISSIONS_P = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.FOREGROUND_SERVICE
+        )
+
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-        private val PERMISSIONS_AUDIO_STORAGE = arrayOf(
-            Manifest.permission.READ_MEDIA_AUDIO
+        private val PERMISSIONS_TIRAMISU = arrayOf(
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.POST_NOTIFICATIONS,
+            Manifest.permission.FOREGROUND_SERVICE
+        )
+
+        @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+        private val PERMISSIONS_UPSIDE_DOWN_CAKE = arrayOf(
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.POST_NOTIFICATIONS,
+            Manifest.permission.FOREGROUND_SERVICE,
+            Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
         )
         private const val REQUEST_EXTERNAL_STORAGE = 1
     }
@@ -38,13 +56,19 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(this.root)
             initSystemBar()
-            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
-                ActivityCompat.requestPermissions(
-                    this@MainActivity, PERMISSIONS_AUDIO_STORAGE, REQUEST_EXTERNAL_STORAGE
+            when (Build.VERSION.SDK_INT) {
+                Build.VERSION_CODES.O -> ActivityCompat.requestPermissions(
+                    this@MainActivity, PERMISSIONS, REQUEST_EXTERNAL_STORAGE
                 )
-            }else{
-                ActivityCompat.requestPermissions(
-                    this@MainActivity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE
+
+                in Build.VERSION_CODES.P..Build.VERSION_CODES.S_V2 -> ActivityCompat.requestPermissions(
+                    this@MainActivity, PERMISSIONS_P, REQUEST_EXTERNAL_STORAGE
+                )
+                Build.VERSION_CODES.TIRAMISU->ActivityCompat.requestPermissions(
+                    this@MainActivity, PERMISSIONS_TIRAMISU, REQUEST_EXTERNAL_STORAGE
+                )
+                Build.VERSION_CODES.UPSIDE_DOWN_CAKE ->ActivityCompat.requestPermissions(
+                    this@MainActivity, PERMISSIONS_UPSIDE_DOWN_CAKE, REQUEST_EXTERNAL_STORAGE
                 )
             }
         }
@@ -65,10 +89,15 @@ class MainActivity : AppCompatActivity() {
             REQUEST_EXTERNAL_STORAGE -> {
                 val havePermission =
                     grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                val s = if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU) "音频权限" else "存储权限"
+                val s =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) "音频权限" else "存储权限"
                 havePermission.let {
                     publicViewModel.havePermission.value = it
-                    Toast.makeText(this, if (it) "${s}授权成功！" else "${s}授权被拒绝！", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        this,
+                        if (it) "${s}授权成功！" else "${s}授权被拒绝！",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -110,8 +139,10 @@ class MainActivity : AppCompatActivity() {
                 windowInsetsCompat?.getInsets(WindowInsetsCompat.Type.statusBars())?.top
             val navigationBarsHeight =
                 windowInsetsCompat?.getInsets(WindowInsetsCompat.Type.navigationBars())?.bottom
-            statusBarsHeight.takeIf { it!=null }?.let { publicViewModel.statusBarsHeight.value = it }
-            navigationBarsHeight.takeIf { it!=null }?.let { publicViewModel.navigationBarsHeight.value = it }
+            statusBarsHeight.takeIf { it != null }
+                ?.let { publicViewModel.statusBarsHeight.value = it }
+            navigationBarsHeight.takeIf { it != null }
+                ?.let { publicViewModel.navigationBarsHeight.value = it }
         }
     }
 }
