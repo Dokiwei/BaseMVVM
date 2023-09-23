@@ -50,7 +50,7 @@ class HomeRVFragment() :
             }
         }
 
-        binding.rvList.adapter = adapter
+        binding.recyclerViewFragmentHome.adapter = adapter
         binding.swipeRefresh.setOnRefreshListener {
             adapter.refresh()
         }

@@ -6,6 +6,5 @@
         android:title="搜索"
         android:id="@+id/action_search"
         android:icon="@drawable/search_icon"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 </menu>

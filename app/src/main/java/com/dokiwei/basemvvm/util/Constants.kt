@@ -44,8 +44,4 @@ object Constants {
         data object ScaleY : AnimProperty("scaleY")
     }
 
-    sealed class LogTag(val tag:String){
-        data object Default:LogTag("默认")
-        data object Lifecycle:LogTag("Lifecycle")
-    }
 }

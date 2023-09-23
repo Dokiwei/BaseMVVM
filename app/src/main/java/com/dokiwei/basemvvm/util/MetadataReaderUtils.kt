@@ -56,7 +56,7 @@ object MetadataReaderUtils {
         return list
     }
 
-    fun getAlbumArt(context: Context, albumId: Long?): Bitmap? {
+    fun getAlbumArt(context: Context, albumId: Long?, size: Int): Bitmap? {
         if (albumId != null) {
             val contentUri = ContentUris.withAppendedId(
                 MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
@@ -74,10 +74,7 @@ object MetadataReaderUtils {
                         .openFileDescriptor(uri, "r")
                     val fd = pfd?.fileDescriptor
                     pfd?.close()
-                    BitmapFactory.decodeFileDescriptor(
-                        fd, null,
-                        BitmapFactory.Options()
-                    )
+                    Conversion.fileDescriptorToBitmap(fd,size)
                 }
             } catch (e: Exception) {
                 return null

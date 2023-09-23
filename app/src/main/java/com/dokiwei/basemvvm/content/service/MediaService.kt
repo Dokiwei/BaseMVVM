@@ -31,7 +31,7 @@ class MediaService : MediaLibraryService() {
 
     companion object {
         private const val PLAYBACK_NOTIFICATION_ID = 1
-        private const val PLAYBACK_CHANNEL_ID = "playback_channel"
+        private const val PLAYBACK_CHANNEL_ID = "playbackChannel"
     }
 
     override fun onCreate() {

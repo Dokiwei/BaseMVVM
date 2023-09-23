@@ -19,7 +19,6 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/music_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/CircleStyle" />
@@ -59,7 +58,7 @@
             app:layout_constraintTop_toTopOf="@id/avatar" />
 
         <TextView
-            android:id="@+id/album"
+            android:id="@+id/musicController_album_fragmentMusic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:alpha="0.6"

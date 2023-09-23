@@ -33,7 +33,6 @@ import kotlinx.coroutines.withContext
 class AccountFragment : BaseFragment<FragmentAccountBinding, ViewModel>(
     FragmentAccountBinding::inflate, null
 ), View.OnClickListener {
-    private var isMusicPlaying=false
     override fun initFragment(
         binding: FragmentAccountBinding, viewModel: ViewModel?, savedInstanceState: Bundle?
     ) {

@@ -11,6 +11,7 @@ import dagger.hilt.android.HiltAndroidApp
  * @author DokiWei
  * @date 2023/9/10 22:58
  */
+@HiltAndroidApp
 class MyApplication : Application() {
 
     companion object{

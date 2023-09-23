@@ -2,13 +2,14 @@ package com.dokiwei.basemvvm.ui.music
 
 import android.animation.ObjectAnimator
 import android.content.ComponentName
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withStarted
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
@@ -43,7 +44,7 @@ import kotlinx.coroutines.withContext
  * @date 2023/9/18 16:20
  */
 class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
-    FragmentMusicBinding::inflate, MusicViewModel::class.java,true
+    FragmentMusicBinding::inflate, MusicViewModel::class.java, true
 ) {
 
     private var player: Player? = null
@@ -53,24 +54,8 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
     override fun initFragment(
         binding: FragmentMusicBinding, viewModel: MusicViewModel?, savedInstanceState: Bundle?
     ) {
-        //设置appbar的paddingTop以解决状态栏下沉
-        lifecycleScope.launch(MyCoroutineExceptionHandler.handler) {
-            publicViewModel?.statusBarsHeight?.let { flow ->
-                //通过flow来监听statusBarsHeight的变化
-                //因为值在activity获取,而只有view创建成功后才会对activity进行创建,所以需要用flow来获取
-                flow.collectLatest {
-                    binding.appBarLayout.setPadding(0, it, 0, 0)
-                }
-            }
-        }
+        initStatusPadding { binding.appBarLayoutFragmentMusic.updatePadding(top = it) }
 
-        val albumAnim =
-            ObjectAnimator.ofFloat(binding.album, Constants.AnimProperty.Rotation.name, 0f, 360f)
-                .apply {
-                    repeatCount = ObjectAnimator.INFINITE
-                    interpolator = LinearInterpolator()
-                    duration = 5000
-                }
         //从系统的contentResolver获取到所有音乐资源信息
         val musicDataList = MetadataReaderUtils.getMusicDataList(requireContext())
         //设置一个全局的sessionToken
@@ -82,8 +67,74 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
         val mediaControllerFuture =
             MediaController.Builder(requireContext(), sessionToken).buildAsync()
 
-        //监听事件初始化
-        initListener(mediaControllerFuture, musicDataList, binding, albumAnim, viewModel,musicDataList.isNotEmpty())
+        val albumAnim = initAlbumAnimator(binding)
+        initListener(
+            mediaControllerFuture, musicDataList, binding, viewModel, musicDataList.isNotEmpty()
+        )
+
+        onPlayingChange(viewModel, binding, albumAnim)
+    }
+
+    /**
+     * 当音乐播放状态为暂停/播放时的事件
+     *
+     * @param viewModel
+     * @param binding
+     * @param albumAnim
+     */
+    private fun onPlayingChange(
+        viewModel: MusicViewModel?, binding: FragmentMusicBinding, albumAnim: ObjectAnimator
+    ) {
+        lifecycleScope.launch(MyCoroutineExceptionHandler.handler) {
+            withStarted {
+                launch {
+                    viewModel?.isPlaying?.collectLatest { isPlaying ->
+                        if (isPlaying) {
+                            binding.name.isSelected = true
+                            if (albumAnim.isPaused) {
+                                albumAnim.resume()
+                            } else {
+                                albumAnim.start()
+                            }
+                        } else {
+                            binding.name.isSelected = false
+                            albumAnim.pause()
+                        }
+                    }
+                }
+            }
+            viewModel?.isPlaying?.collectLatest { isPlaying ->
+                binding.pause.setImg(
+                    isPlaying, R.drawable.pause_icon, R.drawable.play_icon
+                )
+                launch {
+                    while (isPlaying) {
+                        val currentPosition = player?.currentPosition
+                        withContext(Dispatchers.Main) {
+                            currentPosition?.let { long ->
+                                val s = "${Conversion.longConversionToTimeString(long)}/${
+                                    Conversion.longConversionToTimeString(endTime)
+                                }"
+                                binding.time.text = s
+                                binding.seek.setProgress(long.toInt(), true)
+                            }
+                        }
+                        delay(1000)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 初始化专辑图片的播放动画
+     */
+    private fun initAlbumAnimator(binding: FragmentMusicBinding) = ObjectAnimator.ofFloat(
+        binding.musicControllerAlbumFragmentMusic, Constants.AnimProperty.Rotation.name, 0f, 360f
+    ).apply {
+        repeatCount = ObjectAnimator.INFINITE
+        interpolator = LinearInterpolator()
+        duration = 5000
     }
 
 
@@ -92,29 +143,26 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
         mediaControllerFuture: ListenableFuture<MediaController>,
         musicDataList: List<MusicData>,
         binding: FragmentMusicBinding,
-        albumAnim: ObjectAnimator,
         viewModel: MusicViewModel?,
         dataIsNotEmpty: Boolean
     ) {
         mediaControllerFuture.addListener(
             {
-                //获取player 会导致卡顿,但是为了与后台播放service进行联动必须这样获取 google推荐方式
-                if (dataIsNotEmpty) player = mediaControllerFuture.get()
-                //初始化获取player的媒体列表
-                player?.setMediaItems(musicDataList.map {
-                    MediaItem.Builder().setMediaId("${it.uri}").build()
-                })
-                //player监听 必须在本Listener进行设置,不然获取不到player
-                player?.addListener(playerListener(binding, musicDataList, albumAnim))
-                //设置适配器
-                val dataAdapter = MusicDataAdapter(musicDataList, this@MusicFragment)
-                dataAdapter.apply {
-                    binding.rvList.adapter = this
-                    setOnItemClickListener(adapterListener(viewModel))
+                if (dataIsNotEmpty) player = mediaControllerFuture.get().apply {
+                    init(viewModel, binding, musicDataList)
                 }
-            },
-            //Google的提交方式 提交到其他线程会报错
-            MoreExecutors.directExecutor()
+                player?.takeIf { it.mediaItemCount == 0 }?.apply {
+                    setMediaItems(musicDataList.map {
+                        MediaItem.Builder().setMediaId("${it.uri}").build()
+                    })
+                }
+                player?.addListener(playerListener(binding, musicDataList, viewModel))
+
+                val dataAdapter = MusicDataAdapter(musicDataList, this@MusicFragment)
+                binding.recyclerViewFragmentMusic.adapter = dataAdapter
+                dataAdapter.setOnItemClickListener(adapterListener())
+
+            }, MoreExecutors.directExecutor()
         )
 
         //控件监听初始化
@@ -124,7 +172,63 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
         binding.seek.setOnSeekBarChangeListener(seekBarChangeListener(binding))
     }
 
-    //滑动条监听
+    /**
+     * 在第一次加载MediaController时,如果当前音乐正在播放那么从view model中存取数据
+     *
+     *
+     * @param viewModel
+     * @param binding
+     * @param musicDataList
+     */
+    private fun MediaController.init(
+        viewModel: MusicViewModel?, binding: FragmentMusicBinding, musicDataList: List<MusicData>
+    ) {
+        takeUnless { isPlaying }?.apply {
+            viewModel?.let {
+                val ct = it.currentTime.value
+                val et = it.endTime.value
+                if (ct!=null&&et!=null){
+                    val s = "${Conversion.longConversionToTimeString(ct)}/${
+                        Conversion.longConversionToTimeString(et)
+                    }"
+                    binding.time.text = s
+                    binding.seek.max = et.toInt()
+                    binding.seek.progress = ct.toInt()
+                }
+            }
+        }
+        takeIf { isPlaying }?.let { _ ->
+            val mediaMetadata = mediaMetadata
+            mediaMetadata.title?.let { viewModel?.setTitle(it) }
+            mediaMetadata.artworkData?.let {
+                viewModel?.setArtworkData(
+                    Conversion.bitmapToByteArray(
+                        Conversion.byteArrayToBitMap(
+                            it, binding.musicControllerAlbumFragmentMusic.width
+                        )
+                    )
+                )
+            }
+            viewModel?.setIsPlaying(true)
+        }
+        also {
+            viewModel?.let { vm ->
+                val title = vm.title.value
+                val artworkData = vm.artworkData.value
+                if (title != null && artworkData != null) {
+                    setMusicTitleAndAlbum(
+                        title, artworkData, binding, musicDataList, viewModel
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * 进度条监听
+     *
+     * @param binding
+     */
     private fun seekBarChangeListener(binding: FragmentMusicBinding) =
         object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -148,78 +252,97 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
             }
         }
 
-    //适配器监听
-    private fun adapterListener(viewModel: MusicViewModel?) =
-        object : MusicDataAdapter.OnItemClickListener {
-            override fun onItemClick(musicData: MusicData, position: Int) {
-                player?.apply {
-                    seekTo(position, 0)
-                    prepare()
-                    play()
-                }
-                viewModel?.setIsPlaying(true)
+    /**
+     * 适配器监听
+     */
+    private fun adapterListener() = object : MusicDataAdapter.OnItemClickListener {
+        override fun onItemClick(musicData: MusicData, position: Int) {
+            player?.apply {
+                seekTo(position, 0)
+                prepare()
+                play()
             }
         }
+    }
 
-    //播放控制监听
+    /**
+     * 播放控制监听
+     *
+     * @param binding 获取控件
+     * @param musicDataList 音乐数据列表
+     * @param viewModel
+     */
     private fun playerListener(
-        binding: FragmentMusicBinding, musicDataList: List<MusicData>, albumAnim: ObjectAnimator
+        binding: FragmentMusicBinding, musicDataList: List<MusicData>, viewModel: MusicViewModel?
     ) = object : Player.Listener {
 
         override fun onPlayerError(error: PlaybackException) {
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "PlayerError:" + error.message, Toast.LENGTH_LONG)
+                .show()
         }
 
         override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
-            mediaMetadata.title?.let { title ->
-                binding.name.text = title
-                musicDataList.find {
-                    it.name == title
-                }?.duration?.let {
-                    endTime = it
-                    binding.seek.max = endTime.toInt()
-                }
-            }
-            mediaMetadata.artworkData?.let {
-                Glide.with(this@MusicFragment).load(BitmapFactory.decodeByteArray(it, 0, it.size))
-                    .into(binding.album)
-            }
+            setMusicTitleAndAlbum(mediaMetadata, binding, musicDataList, viewModel)
         }
 
 
         override fun onIsPlayingChanged(isPlaying: Boolean) {
-            binding.pause.setImg(
-                isPlaying, R.drawable.pause_icon, R.drawable.play_icon
-            )
-            lifecycleScope.launch(MyCoroutineExceptionHandler.handler) {
-                while (isPlaying) {
-                    val currentPosition = player?.currentPosition
-                    withContext(Dispatchers.Main) {
-                        currentPosition?.let { long ->
-                            val s = "${Conversion.longConversionToTimeString(long)}/${
-                                Conversion.longConversionToTimeString(endTime)
-                            }"
-                            binding.time.text = s
-                            binding.seek.setProgress(long.toInt(), true)
+            viewModel?.setIsPlaying(isPlaying)
+            if (!isPlaying) player?.currentPosition?.let {
+                viewModel?.setCurrentTime(it)
+                viewModel?.setEndTime(endTime)
+            }
 
-                        }
-                    }
-                    delay(1000)
-                }
-            }
-            if (isPlaying) {
-                if (albumAnim.isPaused) {
-                    albumAnim.resume()
-                } else {
-                    albumAnim.start()
-                }
-            } else {
-                albumAnim.pause()
-            }
 
         }
 
 
+    }
+
+    private fun setMusicTitleAndAlbum(
+        title: CharSequence,
+        artworkData: ByteArray,
+        binding: FragmentMusicBinding,
+        musicDataList: List<MusicData>,
+        viewModel: MusicViewModel?
+    ) {
+        viewModel?.setTitle(title)
+        binding.name.text = title
+        musicDataList.find {
+            it.name == title
+        }?.duration?.let {
+            endTime = it
+            binding.seek.max = endTime.toInt()
+        }
+
+        viewModel?.apply {
+            val lastAlbum = Conversion.byteArrayToBitMap(
+                artworkData, binding.musicControllerAlbumFragmentMusic.width
+            ).run {
+                Conversion.bitmapToByteArray(
+                    this
+                )
+            }
+            setArtworkData(lastAlbum)
+        }
+        val reqWidth = binding.musicControllerAlbumFragmentMusic.width
+        val reqHeight = binding.musicControllerAlbumFragmentMusic.height
+        Glide.with(this@MusicFragment)
+            .load(Conversion.byteArrayToBitMap(artworkData, reqWidth, reqHeight))
+            .override(reqWidth, reqHeight).into(binding.musicControllerAlbumFragmentMusic)
+    }
+
+    private fun setMusicTitleAndAlbum(
+        mediaMetadata: MediaMetadata,
+        binding: FragmentMusicBinding,
+        musicDataList: List<MusicData>,
+        viewModel: MusicViewModel?
+    ) {
+        val title = mediaMetadata.title
+        val artworkData = mediaMetadata.artworkData
+        if (title != null && artworkData != null) {
+            setMusicTitleAndAlbum(title, artworkData, binding, musicDataList, viewModel)
+        }
     }
 
     //点击监听
@@ -232,7 +355,6 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
                         prepare()
                         play()
                     }
-                    viewModel?.setIsPlaying(true)
                 }
 
                 binding.prev.id -> {
@@ -241,21 +363,16 @@ class MusicFragment : BaseFragment<FragmentMusicBinding, MusicViewModel>(
                         prepare()
                         play()
                     }
-                    viewModel?.setIsPlaying(true)
                 }
 
                 binding.pause.id -> {
                     viewModel?.let {
-                        it.setIsPlaying(
-                            if (it.isPlaying.value) {
-                                player?.pause()
-                                false
-                            } else {
-                                player?.prepare()
-                                player?.play()
-                                true
-                            }
-                        )
+                        if (it.isPlaying.value) {
+                            player?.pause()
+                        } else {
+                            player?.prepare()
+                            player?.play()
+                        }
                     }
                 }
             }

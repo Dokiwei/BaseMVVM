@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.dokiwei.basemvvm.base.BaseFragment
@@ -27,24 +28,45 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, ViewModel>(
     override fun initFragment(
         binding: FragmentHomeBinding, viewModel: ViewModel?, savedInstanceState: Bundle?
     ) {
-        //设置appbar的paddingTop以解决状态栏下沉
-        lifecycleScope.launch(MyCoroutineExceptionHandler.handler) {
-            publicViewModel?.statusBarsHeight?.let { flow ->
-                //通过flow来监听statusBarsHeight的变化
-                //因为值在activity获取,而只有view创建成功后才会对activity进行创建,所以需要用flow来获取
-                flow.collectLatest {
-                    binding.appBar.setPadding(0, it, 0, 0)
-                }
-            }
-        }
+        initStatusPadding{binding.appBar.updatePadding(top=it)}
 
+        initSearch(binding)
+
+        initViewPagerAndBindTabLayout(binding)
+    }
+
+
+    /**
+     * 设置viewPager2适配器
+     *
+     * @param binding 获取布局
+     */
+    private fun initViewPagerAndBindTabLayout(binding: FragmentHomeBinding) {
+        binding.viewPager.adapter = HomePagerAdapter(childFragmentManager, lifecycle)
+        TabLayoutMediator(binding.topTab, binding.viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> Constants.HomeViewPage.Home.title
+                1 -> Constants.HomeViewPage.Square.title
+                2 -> Constants.HomeViewPage.Qa.title
+                else -> ""
+            }
+        }.attach()
+    }
+
+    /**
+     * 初始化搜索功能
+     *
+     * @param binding
+     */
+    private fun initSearch(binding: FragmentHomeBinding) {
         binding.appSearchView.apply {
             //当appSearchView打开时按返回键退出appSearchView而不是退出程序
-            val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(false) {
-                override fun handleOnBackPressed() {
-                    binding.appSearchView.hide()
+            val onBackPressedCallback: OnBackPressedCallback =
+                object : OnBackPressedCallback(false) {
+                    override fun handleOnBackPressed() {
+                        binding.appSearchView.hide()
+                    }
                 }
-            }
             //获取fragmentActivity,并将返回事件提交给他
             requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
             //通过editText变化时的事件监听搜索
@@ -57,25 +79,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, ViewModel>(
                     true
                 } else false
             }
-            //通过过渡监听来识别当前searchView是否展开 如果展开则将onBackPressedCallback的事件开启
             addTransitionListener { searchView, previousState, newState ->
                 onBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
             }
         }
-
-        //设置viewPager2适配器
-        //传的是childFragmentManager这很重要
-        //如果传的是parentFragmentManager viewPager创建的是与本fragment同级的fragment 因为本fragment无法管理同级的fragment最终会导致异常
-        binding.viewPager.adapter = HomePagerAdapter(childFragmentManager, lifecycle)
-        //这是viewPager2与tabLayout绑定的方法
-        TabLayoutMediator(binding.topTab, binding.viewPager) { tab, position ->
-            tab.text = when (position) {
-                0 -> Constants.HomeViewPage.Home.title
-                1 -> Constants.HomeViewPage.Square.title
-                2 -> Constants.HomeViewPage.Qa.title
-                else -> ""
-            }
-        }.attach()
     }
 
 }

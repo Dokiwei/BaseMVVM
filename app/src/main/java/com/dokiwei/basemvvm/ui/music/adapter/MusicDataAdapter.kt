@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.dokiwei.basemvvm.R
 import com.dokiwei.basemvvm.model.data.MusicData
 import com.dokiwei.basemvvm.util.MetadataReaderUtils
@@ -70,7 +69,7 @@ class MusicDataAdapter(
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val name: TextView = view.findViewById(R.id.name)
-        private val album: TextView = view.findViewById(R.id.album)
+        private val album: TextView = view.findViewById(R.id.musicController_album_fragmentMusic)
         private val avatar: ShapeableImageView = view.findViewById(R.id.avatar)
         private val likeIcon: ImageButton = view.findViewById(R.id.like)
         fun bind(item: MusicData?, fragment: Fragment) {
@@ -79,9 +78,12 @@ class MusicDataAdapter(
                 album.text = it.album
                 it.imgId?.let { imgId ->
                     Glide.with(fragment)
-                        .load(MetadataReaderUtils.getAlbumArt(fragment.requireContext(), imgId))
+                        .load(
+                            MetadataReaderUtils.getAlbumArt(fragment.requireContext(), imgId,avatar.width)
+                        )
                         .skipMemoryCache(true)
-                        .transition(withCrossFade(DrawableCrossFadeFactory.Builder().build()))
+                        .placeholder(R.drawable.music_icon)
+                        .override(avatar.width, avatar.height)
                         .into(avatar)
                 }
                 likeIcon.setImageResource(R.drawable.un_favorite_icon)

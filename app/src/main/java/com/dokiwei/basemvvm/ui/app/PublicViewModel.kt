@@ -10,4 +10,5 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class PublicViewModel: ViewModel() {
     var statusBarsHeight = MutableStateFlow(0)
     var navigationBarsHeight = MutableStateFlow(0)
+    var havePermission = MutableStateFlow(false)
 }
