@@ -2,7 +2,6 @@ package com.dokiwei.basemvvm.network.api
 
 import com.dokiwei.basemvvm.model.data.Article
 import com.dokiwei.basemvvm.util.Constants
-import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

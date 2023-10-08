@@ -1,9 +1,15 @@
 package com.dokiwei.basemvvm.util
 
+import android.content.ContentUris
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
+import android.os.Build
+import android.provider.MediaStore
+import android.util.Size
+import androidx.annotation.RequiresApi
+import com.dokiwei.basemvvm.ui.app.MyApplication
 import java.io.ByteArrayOutputStream
-import java.io.FileDescriptor
 
 /**
  * @author DokiWei
@@ -21,19 +27,11 @@ object Conversion {
         toByteArray()
     }
 
-    fun fileDescriptorToBitmap(fd: FileDescriptor?, size: Int): Bitmap =
-        BitmapFactory.Options().run {
-            inJustDecodeBounds = true
-            BitmapFactory.decodeFileDescriptor(fd, null, this)
-            inSampleSize = calculateInSampleSize(this, size, size)
-            inJustDecodeBounds = false
-            BitmapFactory.decodeFileDescriptor(fd, null, this)
-        }
-
+    fun byteArrayToBitmap(byteArray: ByteArray)=BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     fun byteArrayToBitmap(byteArray: ByteArray, size: Int) =
         byteArrayToBitmap(byteArray, size, size)
 
-    fun byteArrayToBitmap(byteArray: ByteArray, reqWidth: Int, reqHeight: Int): Bitmap =
+    private fun byteArrayToBitmap(byteArray: ByteArray, reqWidth: Int, reqHeight: Int): Bitmap =
         BitmapFactory.Options().run {
             inJustDecodeBounds = true
             BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, this)
@@ -42,6 +40,31 @@ object Conversion {
             BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, this)
         }
 
+    fun pathToByteArray(path:String): ByteArray? {
+        val retriever = MediaMetadataRetriever ()
+        retriever.setDataSource (path)
+        val art = retriever.embeddedPicture
+        retriever.release()
+        return art
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun albumIdToBitmap(albumId: Long?, size: Int): Bitmap? {
+        if (albumId != null) {
+            val contentUri = ContentUris.withAppendedId(
+                MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                albumId
+            )
+            return try {
+                MyApplication.context.contentResolver.loadThumbnail(
+                    contentUri,
+                    Size(size, size),
+                    null)
+            } catch (e: Exception) {
+                return null
+            }
+        } else return null
+    }
     private fun calculateInSampleSize(
         options: BitmapFactory.Options,
         reqWidth: Int,

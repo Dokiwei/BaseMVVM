@@ -8,15 +8,15 @@ import com.dokiwei.basemvvm.R
  */
 fun randomAvatar(): Int {
     val imageIds = intArrayOf(
-        R.drawable.user,
-        R.drawable.user1,
-        R.drawable.user2,
-        R.drawable.user3,
-        R.drawable.user4,
-        R.drawable.user5,
-        R.drawable.user6,
-        R.drawable.user7,
-        R.drawable.user8
+        R.drawable.img_user,
+        R.drawable.img_user1,
+        R.drawable.img_user2,
+        R.drawable.img_user3,
+        R.drawable.img_user4,
+        R.drawable.img_user5,
+        R.drawable.img_user6,
+        R.drawable.img_user7,
+        R.drawable.img_user8
     )
 
     return imageIds[(0..8).random()]

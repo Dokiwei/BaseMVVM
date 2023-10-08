@@ -32,11 +32,12 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     }
     private val viewModel by lazy {
         val viewModelProvider =
-            ViewModelProvider(this, SavedStateViewModelFactory(activity?.application, this))
+            ViewModelProvider(requireActivity())
         viewModelClass?.let {
             viewModelProvider[it]
         }
     }
+
     /**
      * 一个可以全局调用的共享数据的viewModel
      */
@@ -57,15 +58,19 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
      * 设置appbar的paddingTop以解决状态栏下沉
      * @param setPadding 为外部的函数提供一个statusBarsHeight,以实现填充状态栏
      */
-    fun initStatusPadding(setPadding:(Int)->Unit){
+    fun initStatusPadding(systemBarType: Constants.SystemHeightType, setPadding: (Int) -> Unit) {
         lifecycleScope.launch(MyCoroutineExceptionHandler.handler) {
-            publicViewModel?.statusBarsHeight?.let { flow ->
-                //通过flow来监听statusBarsHeight的变化
-                //因为值在activity获取,而只有view创建成功后才会对activity进行创建,所以需要用flow来获取
-                flow.collectLatest {
-                    //通过flow来监听statusBarsHeight的变化
-                    //因为值在activity获取,而只有view创建成功后才会对activity进行创建,所以需要用flow来获取
-                    setPadding(it)
+            if (systemBarType == Constants.SystemHeightType.StatusBars) {
+                publicViewModel?.statusBarsHeight?.let { flow ->
+                    flow.collectLatest {
+                        setPadding(it)
+                    }
+                }
+            } else {
+                publicViewModel?.navigationBarsHeight?.let { flow ->
+                    flow.collectLatest {
+                        setPadding(it)
+                    }
                 }
             }
         }
@@ -82,9 +87,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         Log.d(TAG, "${this.javaClass.simpleName}:onCreateView")
         val binding = inflater(inflater, container, false)

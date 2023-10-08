@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_music"
+    android:background="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_chainStyle="spread_inside">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/musicFragment_item_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/shapeableImageView_roundedRectangleStyle_20Percent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/musicFragment_item_play"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_play"
+            android:visibility="gone"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintEnd_toEndOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintStart_toStartOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/shapeableImageView_roundedRectangleStyle_20Percent"/>
+
+        <TextView
+            android:id="@+id/musicFragment_item_album"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="专辑"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/musicFragment_item_author"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.15" />
+
+        <TextView
+            android:id="@+id/musicFragment_item_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="歌曲名"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/musicFragment_item_author"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.3" />
+
+
+        <TextView
+            android:id="@+id/musicFragment_item_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:alpha="0.85"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="歌手"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/musicFragment_item_album"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/musicFragment_item_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

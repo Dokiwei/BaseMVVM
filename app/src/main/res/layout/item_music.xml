@@ -1,88 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_music"
-    android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    android:background="@android:color/transparent"
     app:cardCornerRadius="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/avatar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:id="@+id/musicFragment_item_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/CircleStyle" />
+            app:shapeAppearance="@style/shapeableImageView_roundedRectangleStyle_20Percent" />
 
-        <ImageView
-            android:id="@+id/play"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/musicFragment_item_play"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:src="@drawable/ic_play"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/avatar"
-            app:layout_constraintEnd_toEndOf="@+id/avatar"
-            app:layout_constraintStart_toStartOf="@+id/avatar"
-            app:layout_constraintTop_toTopOf="@+id/avatar"
-            android:contentDescription="正在播放" />
-
-        <ViewStub
-            android:id="@+id/view_stub"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/avatar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/avatar" />
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintEnd_toEndOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintStart_toStartOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/shapeableImageView_roundedRectangleStyle_20Percent" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/musicFragment_item_album"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="歌曲名"
-            android:textSize="18sp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/view_stub"
-            app:layout_constraintEnd_toStartOf="@+id/like"
-            app:layout_constraintStart_toEndOf="@+id/avatar"
-            app:layout_constraintTop_toTopOf="@id/avatar" />
-
-        <TextView
-            android:id="@+id/musicController_album_fragmentMusic"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:alpha="0.6"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="专辑"
-            android:textSize="14sp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/musicFragment_item_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+        <TextView
+            android:id="@+id/musicFragment_item_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/avatar"
-            app:layout_constraintEnd_toStartOf="@+id/like"
-            app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@id/view_stub" />
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:text="歌曲名"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/musicFragment_item_author"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/musicFragment_item_album" />
 
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/like"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="收藏"
-            android:src="@drawable/un_favorite_icon"
+        <TextView
+            android:id="@+id/musicFragment_item_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:alpha="0.85"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="歌手"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/musicFragment_item_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/musicFragment_item_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

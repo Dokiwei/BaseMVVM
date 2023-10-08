@@ -10,4 +10,9 @@
     <string name="previous">上一首</string>
     <string name="next">下一首</string>
     <string name="play">播放</string>
+    <string name="settings">设置</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

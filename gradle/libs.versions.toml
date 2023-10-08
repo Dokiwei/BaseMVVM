@@ -16,16 +16,38 @@ room_version = "2.5.2"
 hilt = "2.48"
 ksp = "1.9.10-1.0.13"
 core = "1.12.0"
+palette = "1.0.0"
 constraintlayout = "2.1.4"
 refresh = "1.1.0"
-media="1.6.0"
-media3="1.1.1"
+media = "1.6.0"
+media3 = "1.1.1"
 glide = "4.16.0"
+leakcanary = "2.12"
+mp3agic = "0.9.1"
+blurry = "4.0.1"
+lyricViewX="1.4.0-alpha01"
+lyric-getter= "5.0.5"
+
 
 [libraries]
+#Lyric-Getter
+lyric-getter = {group="com.github.xiaowine",name="Lyric-Getter-Api",version.ref="lyric-getter"}
+
+#LyricViewX
+lyricViewX = {group="com.github.Moriafly",name = "LyricViewX",version.ref="lyricViewX"}
+
+#模糊 blurry
+blurry = { group = "jp.wasabeef", name = "blurry", version.ref = "blurry" }
+
 #glide
-glide = {group="com.github.bumptech.glide",name="glide",version.ref="glide"}
-glide-compiler = {group="com.github.bumptech.glide",name="ksp",version.ref="glide"}
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
+
+#mp3agic
+mp3agic = { group = "com.mpatric", name = "mp3agic", version.ref = "mp3agic" }
+
+#leakcanary
+leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 
 #hilt
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -62,6 +84,7 @@ androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.re
 androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
+androidx-palette = { group = "androidx.palette", name = "palette", version.ref = "palette" }
 
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 #test

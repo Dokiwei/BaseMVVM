@@ -1,10 +1,10 @@
 package com.dokiwei.basemvvm.ui.app
 
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.dokiwei.basemvvm.R
@@ -25,13 +25,33 @@ class MainNavFragment : BaseFragment<FragmentMainNavBinding, ViewModel>(
         savedInstanceState: Bundle?
     ) {
         (childFragmentManager.findFragmentById(R.id.main_nav_view) as NavHostFragment).apply {
+            this.navController.addOnDestinationChangedListener{_,destination,_->
+                when (destination.id) {
+                    R.id.musicFragment -> {
+                        if (binding.bottomMainNav.visibility == View.VISIBLE){
+                            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q)
+                                binding.bottomMainNav.setTransitionVisibility(View.GONE)
+                            else
+                                binding.bottomMainNav.visibility = View.GONE
+                        }
+                    }
+                    else->{
+                        if (binding.bottomMainNav.visibility == View.GONE){
+                            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q)
+                                binding.bottomMainNav.setTransitionVisibility(View.VISIBLE)
+                            else
+                                binding.bottomMainNav.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
             binding.bottomMainNav.setupWithNavController(this.navController)
         }
     }
 
     private fun NavHostFragment.initControllerListener() {
         var currentFragment :Fragment? = null
-        this.navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        this.navController.addOnDestinationChangedListener { _, destination, _ ->
             val fragment = when (destination.id) {
                 R.id.homeFragment -> childFragmentManager.findFragmentById(R.id.homeFragment)
                 R.id.musicFragment -> childFragmentManager.findFragmentById(R.id.musicFragment)

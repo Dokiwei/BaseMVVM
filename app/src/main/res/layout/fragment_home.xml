@@ -12,13 +12,17 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll">
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <com.google.android.material.search.SearchBar
                 android:id="@+id/app_search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="搜索文章" />
+                android:hint="搜索文章"
+                android:elevation="0dp"
+                app:defaultMarginsEnabled="false"
+                android:layout_margin="10dp"
+                app:elevation="50dp"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.appbar.MaterialToolbar

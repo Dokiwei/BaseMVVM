@@ -3,6 +3,7 @@ package com.dokiwei.basemvvm.ui.app
 import android.Manifest
 import android.app.UiModeManager
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -33,12 +34,19 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.FOREGROUND_SERVICE
         )
-
+        @RequiresApi(Build.VERSION_CODES.R)
+        private val PERMISSIONS_R = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.FOREGROUND_SERVICE,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE
+        )
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private val PERMISSIONS_TIRAMISU = arrayOf(
             Manifest.permission.READ_MEDIA_AUDIO,
             Manifest.permission.POST_NOTIFICATIONS,
-            Manifest.permission.FOREGROUND_SERVICE
+            Manifest.permission.FOREGROUND_SERVICE,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE
         )
 
         @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -46,7 +54,8 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_MEDIA_AUDIO,
             Manifest.permission.POST_NOTIFICATIONS,
             Manifest.permission.FOREGROUND_SERVICE,
-            Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
+            Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE
         )
         private const val REQUEST_EXTERNAL_STORAGE = 1
     }
@@ -61,13 +70,19 @@ class MainActivity : AppCompatActivity() {
                     this@MainActivity, PERMISSIONS, REQUEST_EXTERNAL_STORAGE
                 )
 
-                in Build.VERSION_CODES.P..Build.VERSION_CODES.S_V2 -> ActivityCompat.requestPermissions(
+                in Build.VERSION_CODES.P..<Build.VERSION_CODES.R -> ActivityCompat.requestPermissions(
                     this@MainActivity, PERMISSIONS_P, REQUEST_EXTERNAL_STORAGE
                 )
-                Build.VERSION_CODES.TIRAMISU->ActivityCompat.requestPermissions(
+
+                in Build.VERSION_CODES.R..<Build.VERSION_CODES.TIRAMISU -> ActivityCompat.requestPermissions(
+                    this@MainActivity, PERMISSIONS_R, REQUEST_EXTERNAL_STORAGE
+                )
+
+                Build.VERSION_CODES.TIRAMISU -> ActivityCompat.requestPermissions(
                     this@MainActivity, PERMISSIONS_TIRAMISU, REQUEST_EXTERNAL_STORAGE
                 )
-                Build.VERSION_CODES.UPSIDE_DOWN_CAKE ->ActivityCompat.requestPermissions(
+
+                Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> ActivityCompat.requestPermissions(
                     this@MainActivity, PERMISSIONS_UPSIDE_DOWN_CAKE, REQUEST_EXTERNAL_STORAGE
                 )
             }
@@ -87,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_EXTERNAL_STORAGE -> {
-                val havePermission =
+/*                val havePermission =
                     grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 val s =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) "音频权限" else "存储权限"
@@ -99,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
-                }
+                }*/
             }
         }
     }
@@ -137,10 +152,19 @@ class MainActivity : AppCompatActivity() {
             val windowInsetsCompat = ViewCompat.getRootWindowInsets(window.decorView)
             val statusBarsHeight =
                 windowInsetsCompat?.getInsets(WindowInsetsCompat.Type.statusBars())?.top
-            val navigationBarsHeight =
-                windowInsetsCompat?.getInsets(WindowInsetsCompat.Type.navigationBars())?.bottom
             statusBarsHeight.takeIf { it != null }
                 ?.let { publicViewModel.statusBarsHeight.value = it }
+            val navigationBarsHeight =
+                if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (windowInsetsCompat!!.getInsets(WindowInsetsCompat.Type.navigationBars()).left > 0) {
+                        windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars()).left
+                    } else {
+                        windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars()).right
+                    }
+                } else {
+                    // 竖屏
+                    windowInsetsCompat?.getInsets(WindowInsetsCompat.Type.navigationBars())?.bottom
+                }
             navigationBarsHeight.takeIf { it != null }
                 ?.let { publicViewModel.navigationBarsHeight.value = it }
         }

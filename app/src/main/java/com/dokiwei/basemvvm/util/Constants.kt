@@ -11,6 +11,9 @@ object Constants {
     enum class HomeApiMethod {
         Home, Square, Qa
     }
+    enum class SystemHeightType{
+        NavigationBars,StatusBars
+    }
 
     sealed class HomeViewPage(val title: String) {
         data object Home : HomeViewPage("主页")

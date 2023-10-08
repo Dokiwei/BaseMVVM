@@ -1,10 +1,7 @@
 package com.dokiwei.basemvvm.ui.home.paging
 
-import android.util.Log
-import androidx.paging.Pager
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.dokiwei.basemvvm.model.data.ArticleData
 import com.dokiwei.basemvvm.model.data.ArticleDatas
 import com.dokiwei.basemvvm.network.client.RetrofitClient
 import com.dokiwei.basemvvm.util.Constants

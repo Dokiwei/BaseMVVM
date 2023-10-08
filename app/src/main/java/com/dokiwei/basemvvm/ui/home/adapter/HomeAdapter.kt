@@ -47,13 +47,13 @@ class HomeAdapter : PagingDataAdapter<ArticleDatas, HomeAdapter.HomeViewHolder>(
         fun bind(item: ArticleDatas?, context: Context) {
             item?.let {
                 val typeText = "分类:${it.chapterName}"
-                homeItem.setAnim(context, R.anim.item_anim)
+                homeItem.setAnim(context, R.anim.anim_item)
                 avatar.setImageResource(randomAvatar())
                 title.text = it.title
                 type.text = typeText
                 date.text = it.niceShareDate
                 shareUser.text(it.shareUser!="",it.shareUser,it.author)
-                likeIcon.setImg(it.collect, R.drawable.favorite_icon, R.drawable.un_favorite_icon)
+                likeIcon.setImg(it.collect, R.drawable.ic_favorite, R.drawable.ic_un_favorite)
             }
         }
     }

@@ -17,10 +17,23 @@
         <item name="android:paddingBottom">1dp</item>
     </style>
     <!--ShapeableImageView 圆 -->
-    <style name="CircleStyle">
+    <style name="shapeableImageView_circleStyle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="shapeableImageView_roundedRectangleStyle_20Percent">
+        <item name="cornerSize">20%</item>
+    </style>
+    <style name="shapeableImageView_rhombusStyle">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="shapeableImageView_leafStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">50%</item>
+        <item name="cornerSizeBottomRight">50%</item>
+    </style>
+
     <style name="custom_dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <!-- Dialog的windowFrame框为无 -->

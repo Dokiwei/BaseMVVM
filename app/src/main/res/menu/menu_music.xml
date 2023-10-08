@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_sort"
+        android:title="筛选"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:enabled="false"
+                android:title="排序方式" />
+            <group
+                android:id="@+id/action_group_sort"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_sort_by_title"
+                    android:title="根据名称排列"
+                    android:checked="true"/>
+                <item
+                    android:id="@+id/action_sort_by_author"
+                    android:title="根据作者排列" />
+                <item
+                    android:id="@+id/action_sort_by_album"
+                    android:title="根据专辑排列" />
+                <item
+                    android:id="@+id/action_sort_by_duration"
+                    android:title="根据时长排列" />
+            </group>
+            <item
+                android:enabled="false"
+                android:title="排序模式" />
+            <group
+                android:id="@+id/action_group_sort_mode"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_sort_check"
+                    android:title="升序(A~Z,小到大)"
+                    android:checked="true"/>
+                <item
+                    android:id="@+id/action_sort_check_descending"
+                    android:title="降序(Z~A,大到小)" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_music_list"
+        android:icon="@drawable/ic_queue_music"
+        android:title="音乐列表"
+        app:showAsAction="ifRoom" />
+</menu>

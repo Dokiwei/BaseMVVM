@@ -1,6 +1,5 @@
 package com.dokiwei.basemvvm.network.client
 
-import android.util.Log
 import com.dokiwei.basemvvm.network.api.HomeApi
 import com.dokiwei.basemvvm.ui.app.MyApplication
 import com.dokiwei.basemvvm.util.Constants

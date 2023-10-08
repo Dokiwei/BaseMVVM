@@ -1,143 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/musicFragment_main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout_fragmentMusic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="音乐播放器"
-            app:titleCentered="true"
-            app:menu="@menu/search"/>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.search.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_fragmentMusic"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scrollbarSize="0dp"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/layout_musicController_fragmentMusic"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout_fragmentMusic" />
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_musicController_fragmentMusic"
+        android:id="@+id/musicFragment_layout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.divider.MaterialDivider
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout_fragmentMusic"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/musicController_album_fragmentMusic"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:scaleType="centerCrop"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/music_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/CircleStyle" />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toTopOf="@+id/prev"
-            app:layout_constraintEnd_toStartOf="@+id/time"
-            app:layout_constraintStart_toEndOf="@+id/musicController_album_fragmentMusic"
-            app:layout_constraintTop_toBottomOf="@+id/seek" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/time"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/musicFragment_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/menu_music"
+                app:navigationIcon="@drawable/ic_search"
+                app:title="音乐播放器"
+                app:titleCentered="true" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.search.SearchView
+            android:id="@+id/musicFragment_searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="-84dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/musicFragment_searchView_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </com.google.android.material.search.SearchView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/musicFragment_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/musicFragment_musicController_layout"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout_fragmentMusic" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/musicFragment_musicController_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/musicController_albumImage"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_music"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/shapeableImageView_circleStyle" />
+
+            <TextView
+                android:id="@+id/musicController_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                app:layout_constraintBottom_toTopOf="@+id/musicController_prev"
+                app:layout_constraintEnd_toStartOf="@+id/musicController_time"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/musicController_albumImage"
+                app:layout_constraintTop_toBottomOf="@+id/musicController_seek" />
+
+            <TextView
+                android:id="@+id/musicController_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/musicController_next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/musicController_title"
+                app:layout_constraintTop_toBottomOf="@+id/musicController_seek" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/musicController_seek"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                app:layout_constraintBottom_toTopOf="@+id/musicController_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/musicController_albumImage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/musicController_next"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="下一首"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_next"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/musicController_shuffle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/musicController_pause" />
+
+            <ImageButton
+                android:id="@+id/musicController_pause"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="上一首"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_play"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/musicController_next"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/musicController_prev" />
+
+            <ImageButton
+                android:id="@+id/musicController_prev"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="上一首"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_prev"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/musicController_pause"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/musicController_repeat" />
+
+            <ImageButton
+                android:id="@+id/musicController_repeat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="循环模式"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_repeat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/musicController_prev"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/musicController_albumImage"
+                app:layout_constraintTop_toTopOf="@+id/musicController_prev" />
+
+            <ImageButton
+                android:id="@+id/musicController_shuffle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="随机模式"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_shuffle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/musicController_next"
+                app:layout_constraintTop_toTopOf="@+id/musicController_next" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/musicFragment_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/next"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seek" />
-
-        <androidx.appcompat.widget.AppCompatSeekBar
-            android:id="@+id/seek"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:progress="0"
-            app:layout_constraintBottom_toTopOf="@+id/name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/musicController_album_fragmentMusic"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/next"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="下一首"
-            android:scaleType="centerCrop"
-            android:src="@drawable/skip_next_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pause" />
-
-        <ImageButton
-            android:id="@+id/pause"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="上一首"
-            android:scaleType="centerCrop"
-            android:src="@drawable/play_icon"
+            android:layout_marginBottom="140dp"
+            android:src="@drawable/ic_location"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/musicController_album_fragmentMusic" />
-
-        <ImageButton
-            android:id="@+id/prev"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="20dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="上一首"
-            android:scaleType="centerCrop"
-            android:src="@drawable/skip_previous_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/pause" />
-
+            app:layout_anchor="@id/musicFragment_layout"
+            android:contentDescription="回到顶部" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

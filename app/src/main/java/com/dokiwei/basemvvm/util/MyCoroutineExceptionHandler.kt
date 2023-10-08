@@ -9,6 +9,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
  */
 object MyCoroutineExceptionHandler {
     val handler = CoroutineExceptionHandler { _, e->
-        Log.e("协程异常捕捉", "error:${e.message}")
+        Log.e("协程异常捕捉", "error:${e.message}\nAll:$e")
     }
 }

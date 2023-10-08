@@ -39,12 +39,26 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     //glide
     implementation(libs.glide)
     ksp(libs.glide.compiler)
+
+    //blurry
+    implementation(libs.blurry)
+
+    //lyricViewX
+    implementation(libs.lyricViewX)
+    //lyric-getter
+    implementation(libs.lyric.getter)
+
+    //mp3agic
+    implementation(libs.mp3agic)
 
     //navigation
     implementation(libs.navigation.fragment)
@@ -84,6 +98,7 @@ dependencies {
     implementation(libs.androidx.media)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.palette)
     implementation(libs.core.ktx)
 
     implementation(libs.material)
@@ -92,6 +107,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.junit)
+    debugImplementation(libs.leakcanary.android)
 
 
 }

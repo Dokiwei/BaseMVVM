@@ -11,7 +11,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.dokiwei.basemvvm.ui.account.AccountFragment"
+        android:name="com.dokiwei.basemvvm.ui.setting.SettingsFragment"
         android:label="AccountFragment" />
     <fragment
         android:id="@+id/musicFragment"
